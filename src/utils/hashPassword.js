@@ -1,7 +1,7 @@
-const { createHash } = require("hash-wasm");
+const { whirlpool } = require("hash-wasm");
 
 const hashPassword = async (password) => {
-  return await createHash("whirlpool", { input: password });
+  return await whirlpool(password);
 };
 
 module.exports = { hashPassword };

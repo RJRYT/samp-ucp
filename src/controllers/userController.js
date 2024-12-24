@@ -4,9 +4,10 @@ const pool = require("../config/db");
 const getUserProfile = async (req, res, next) => {
   try {
     const userId = req.user.id;
+    console.log(req.user);
 
     const [rows] = await pool.execute(
-      "SELECT id, username FROM users WHERE id = ?",
+      "SELECT uid, username FROM users WHERE uid = ?",
       [userId]
     );
 
