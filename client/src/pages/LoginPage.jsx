@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import Dialog from "../components/Dialog";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
   const [credentials, setCredentials] = useState({
     username: "",
@@ -10,7 +12,10 @@ const LoginPage = () => {
   });
   const { login } = useAuth();
 
-  const handleClose = () => setIsOpen(false);
+  const handleClose = () => {
+    setIsOpen(false);
+    navigate("/profile");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
