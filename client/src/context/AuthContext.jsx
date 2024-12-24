@@ -17,13 +17,13 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (credentials) => {
-    const { data } = await apiService.post("/login", credentials);
+    const { data } = await apiService.post("auth/login", credentials);
     localStorage.setItem("token", data.token);
     setUser(data.user);
   };
 
   const signup = async (details) => {
-    const { data } = await apiService.post("/signup", details);
+    const { data } = await apiService.post("auth/signup", details);
     localStorage.setItem("token", data.token);
     setUser(data.user);
   };
