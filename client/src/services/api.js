@@ -1,10 +1,15 @@
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: "http://localhost:3000/api", // Update with your backend URL
-  headers: {
-    "Content-Type": "application/json",
-  },
+const apiService = axios.create({
+  baseURL: "http://localhost:3000/api",
 });
 
-export default api;
+apiService.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export default apiService;

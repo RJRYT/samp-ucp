@@ -1,23 +1,40 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import apiService from "../services/apiService";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
 
-  const login = (userData) => {
-    setUser(userData);
-    setIsAuthenticated(true);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      apiService
+        .get("user/profile")
+        .then((res) => setUser(res.data))
+        .catch(() => localStorage.removeItem("token"));
+    }
+  }, []);
+
+  const login = async (credentials) => {
+    const { data } = await apiService.post("/login", credentials);
+    localStorage.setItem("token", data.token);
+    setUser(data.user);
+  };
+
+  const signup = async (details) => {
+    const { data } = await apiService.post("/signup", details);
+    localStorage.setItem("token", data.token);
+    setUser(data.user);
   };
 
   const logout = () => {
+    localStorage.removeItem("token");
     setUser(null);
-    setIsAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, signup, logout }}>
       {children}
     </AuthContext.Provider>
   );
